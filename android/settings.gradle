@@ -1,0 +1,3 @@
+rootProject.name = 'myApk'
+
+include ':app'
