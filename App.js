@@ -18,12 +18,14 @@ import { addPlace, deletePlace, selectPlace, deselectPlace } from './src/store/a
 
 
 
+
 class App extends Component {
 
 
 
   placeAddedHandler = placeName => {
     this.props.onAddPlace(placeName);
+    console.log("place added")
   };
 
   placeDeletedHandler = () => {
