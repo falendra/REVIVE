@@ -4,6 +4,7 @@ import startMainTabs from '../MainTabs/startMainTabs'
 import DefaultInput from "../../components/UI/DefaultInput/DefaultInput"
 import HeadingText from "../../components/UI/HeadingText/HeadingText"
 import BackgroundImage from "../../assets/BackgroundImage.jpg"
+import ButtonWithoutBackground from "../../components/UI/Button/ButtonWithoutBackground/ButtonWithoutBackground"
 class AuthScreen extends Component {
 
     loginHandler = () => {
@@ -13,14 +14,15 @@ class AuthScreen extends Component {
         return (
             <ImageBackground source={BackgroundImage} style={styles.backgroundImage}>
                 <View style={styles.container}>
-
+                <ButtonWithoutBackground onPress={()=>alert("test") } color="#4EECCA" >Switch to login  </ButtonWithoutBackground>
                     <HeadingText>Please.. Login</HeadingText>
                     <View style={styles.inputContainer}>
                         <DefaultInput placeholder="Your E-mail Address" style={styles.input} />
                         <DefaultInput placeholder="Password" style={styles.input} />
                         <DefaultInput placeholder="Confirm Password" style={styles.input} />
                     </View>
-
+                   
+                    
                     <Button title="Login" onPress={this.loginHandler} />
                 </View>
             </ImageBackground>
