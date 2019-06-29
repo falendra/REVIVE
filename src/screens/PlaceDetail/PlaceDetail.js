@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import { View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Image, Text, Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
 import {connect} from "react-redux"
@@ -21,7 +21,7 @@ class PlaceDetail extends Component{
                 <View style={styles.iconContainer}>
     
                     <TouchableOpacity onPress={this.placeDeletedHandler}>
-                        <Icon size={30} name="ios-trash" color="#f20004" />
+                        <Icon size={30} name= {Platform.OS==="android" ?"md-trash" :"ios-trash" }color="#f20004" />
                     </TouchableOpacity>
     
     
