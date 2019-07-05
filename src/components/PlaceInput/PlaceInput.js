@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import React from "react";
+
 import DefaultInput from "../UI/DefaultInput/DefaultInput"
 
 
@@ -9,6 +9,8 @@ const PlaceInput = props => (
           placeholder="Place Name"
           value={props.placeName}
           onChangeText={props.onChangeText}
+          autoCapitalize= 'words'
+          autoCorrect ={false}
         />
         
 );

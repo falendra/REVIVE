@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, ScrollView, Image } from "react-native";
+import { View,  StyleSheet, Button, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { addPlace } from '../../store/actions/index'
 import PlaceInput from '../../components/PlaceInput/PlaceInput'
@@ -51,7 +51,7 @@ class SharePlaceScreen extends Component {
     render() {
         return (
             <ScrollView >
-                <View style={styles.container}>
+                <View style={styles.container} >
                     <MainText><HeadingText>Share a place with us ..!</HeadingText></MainText>
                     <PickImage />
                     <PickLocation />
