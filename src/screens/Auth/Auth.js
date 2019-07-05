@@ -6,6 +6,7 @@ import HeadingText from "../../components/UI/HeadingText/HeadingText"
 import BackgroundImage from "../../assets/BackgroundImage.jpg"
 import ButtonWithBackground from "../../components/UI/Button/ButtonWithBackground/ButtonWithBackground"
 import MainText from "../../components/UI/MainText/MainText"
+import validate from "../../utility/validation"
 class AuthScreen extends Component {
 
 
@@ -53,17 +54,48 @@ class AuthScreen extends Component {
     };
 
     updateInputState=(key,value)=>{
-        this.setState((prevState) => { 
-            return {
-                controls:{
-                    ...prevState.controls,
-                    [key]:{
-                        ...prevState.controls[key],
-                        value: value,
-                    }
-                }
-               
-              }});
+        let connectedValue = {};
+        if (this.state.controls[key].validationRules.equalTo) {
+          const equalControl = this.state.controls[key].validationRules.equalTo;
+          const equalValue = this.state.controls[equalControl].value;
+          connectedValue = {
+            ...connectedValue,
+            equalTo: equalValue
+          };
+        }
+        if (key === "password") {
+          connectedValue = {
+            ...connectedValue,
+            equalTo: value
+          };
+        }
+        this.setState(prevState => {
+          return {
+            controls: {
+              ...prevState.controls,
+              confirmPassword: {
+                ...prevState.controls.confirmPassword,
+                valid:
+                  key === "password"
+                    ? validate(
+                        prevState.controls.confirmPassword.value,
+                        prevState.controls.confirmPassword.validationRules,
+                        connectedValue
+                      )
+                    : prevState.controls.confirmPassword.valid
+              },
+              [key]: {
+                ...prevState.controls[key],
+                value: value,
+                valid: validate(
+                  value,
+                  prevState.controls[key].validationRules,
+                  connectedValue
+                )
+              }
+            }
+          };
+        });
         
     }
 
