@@ -43,6 +43,13 @@ const startTabs = () => {
 
             ],
 
+            tabsStyle: { // optional, **iOS Only** add this if you want to style the tab bar beyond the defaults
+                tabBarButtonColor: '#ff0000'
+              },
+
+            appStyle:{   //for android 
+                tabBarSelectedButtonColor: '#ff9900',
+            },
             drawer: {
                 left: {
                     screen: "myApk.SideDrawerScreen"
