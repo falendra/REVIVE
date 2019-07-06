@@ -1,16 +1,84 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet ,Dimensions} from "react-native";
+import MapView from 'react-native-maps'
 
 class PickLocation extends Component {
+
+    state={
+        focusedLocation:{
+            latitude:12.905716619805665,
+            longitude:77.60940491211386,
+            latitudeDelta:0.0122,
+            longitudeDelta:
+            Dimensions.get("window").width /
+            Dimensions.get("window").height *
+            0.0122,
+        },
+        locationChosen:false
+    }
+
+
+
+    pickLocationHandler =event=>{
+        const coords =event.nativeEvent.coordinate;
+        this.map.animateToRegion(
+            {
+                ...this.state.focusedLocation,
+                latitude:coords.latitude,
+                longitude:coords.longitude,
+            }
+        )
+        this.setState((prevState) => {
+             return { 
+                 focusedLocation:{
+                     ...prevState.focusedLocation,
+                     latitude:coords.latitude,
+                     longitude:coords.longitude,
+                 },
+                 locationChosen:true
+
+         }});
+        
+    }
+
+    getLocationHandler=()=>{
+        navigator.geolocation.getCurrentPosition(pos=>{
+            const coordsEvent={
+                nativeEvent:{
+                    coordinate:{
+                        latitude:pos.coords.latitude,
+                        longitude:pos.coords.longitude,
+    
+                    }
+                }
+            }
+            this.pickLocationHandler(coordsEvent);
+        },
+        err=>{
+            alert("fetching location failed ,please pick one manually!")
+        }
+        
+        );
+    }
     render() {
+        let marker = null;
+        if(this.state.locationChosen){
+            marker=<MapView.Marker coordinate ={this.state.focusedLocation}/>
+        }
         return (
             <View style={styles.container}>
-                <View style={styles.placeholder}>
-                    <Text> map</Text>
-                </View>
-
+                <MapView 
+                initialRegion={this.state.focusedLocation}
+                region={this.state.focusedLocation}
+                style={styles.map}
+                onPress={this.pickLocationHandler} 
+                ref={ref=>this.map =ref}> 
+        
+                {marker}
+        
+                </MapView>
                 <View style={styles.button}>
-                    <Button title="Locate me" onPress={()=>alert("pick location")} />
+                    <Button title="Locate me" onPress={this.getLocationHandler} />
                 </View>
             </View>
         );
@@ -22,12 +90,9 @@ const styles = StyleSheet.create({
         width:"100%",
         alignItems: "center"
     },
-    placeholder: {
-        borderWidth: 1,
-        backgroundColor: '#eee',
-        borderColor: "black",
-        width: "80%",
-        height: 200,
+    map: {
+        width:"100%",
+        height:250
 
     },
     button: {
@@ -37,4 +102,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default PickLocation;
+export default PickLocation; 
