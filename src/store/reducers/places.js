@@ -17,7 +17,7 @@ const reducer = (state = initialState, action) => {
                     key: Math.random(),
                     name: action.placeName,
                     image: {
-                        uri: "https://images.unsplash.com/photo-1541890289-b86df5bafd81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1456&q=80"
+                        uri: action.image.uri
                     },
                     location:action.location
                 })
