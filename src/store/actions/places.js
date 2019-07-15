@@ -5,15 +5,29 @@ export const addPlace=(placeName,location,image)=>{
             name: placeName,
             location: location
         };
-        fetch("https://myapk-react-native.firebaseio.com/places.json", {
+
+        
+
+        fetch("https://us-central1-myapk-react-native.cloudfunctions.net/storeImage", {
             method: "POST",
-            body: JSON.stringify(placeData)
+            body: JSON.stringify({
+                image: image.base64
+            })
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log( err))
         .then(res => res.json())
         .then(parsedRes => {
             console.log(parsedRes);
-        });
+            });
+        // fetch("https://myapk-react-native.firebaseio.com/places.json", {
+        //     method: "POST",
+        //     body: JSON.stringify(placeData)
+        // })
+        // .catch(err => console.log(err))
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     console.log(parsedRes);
+        // });
     };
 
 };
