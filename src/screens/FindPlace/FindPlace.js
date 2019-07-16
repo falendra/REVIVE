@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from "react-native";
 import PlaceList from "../../components/PlaceList/PlaceList"
 import { connect } from "react-redux";
+import {getPlaces} from '../../store/actions/index'
 
 
 class FindPlaceScreen extends Component {
@@ -21,6 +22,15 @@ class FindPlaceScreen extends Component {
         removeAnim: new Animated.Value(1),
         placesAnim: new Animated.Value(0)
     };
+
+
+    componentDidMount(){
+        this.props.onLoadPlaces();
+        console.log("component did mount find place")
+
+
+    };
+
 
     onNavigatorEvent = event => {
         if (event.type === "NavBarButtonPress") {
@@ -74,6 +84,8 @@ class FindPlaceScreen extends Component {
             }
         })
     }
+
+    
     render() {
 
         let content = (
@@ -140,4 +152,10 @@ const mapStateToProps = state => {
         places: state.places.places
     };
 };
-export default connect(mapStateToProps, null)(FindPlaceScreen);
+
+const mapDispatchToProps =dispatch =>{
+    return{
+        onLoadPlaces : ()=> dispatch(getPlaces())
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);
