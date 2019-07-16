@@ -32,16 +32,15 @@ export const addPlace = (placeName, location, image) => {
                     method: "POST",
                     body: JSON.stringify(placeData)
                 })
+                   .then(res => res.json())
+                    .then(parsedRes => {
+                        dispatch(uiStopLoading());
+                       // dispatch(getPlaces());                  //to reflect added place on findplace screen
+                    })
                     .catch(err => {
                         console.log(err);
                         alert("Something went wrong ...please try again");
                         dispatch(uiStopLoading());
-                    })
-                    .then(res => res.json())
-                    .then(parsedRes => {
-                        console.log(parsedRes);
-                        dispatch(uiStopLoading());
-                        dispatch(getPlaces());                  //to reflect added place on findplace screen
                     });
             });
 
@@ -53,14 +52,9 @@ export const getPlaces = () => {
     return dispatch => {
 
         fetch("https://myapk-react-native.firebaseio.com/places.json")
-            .catch(err => {
-                console.log(err);
-                alert("Something went wrong ...please try again");
-            })
-            .then(res => res.json())
+            // .then(res => res.json())
             .then(parsedRes => {
                 console.log(parsedRes);
-
                 const places = [];
 
                 for (let key in parsedRes) {
@@ -72,8 +66,11 @@ export const getPlaces = () => {
                 }
                 dispatch(setPlaces(places))
 
+            }).catch(err => {
+                alert("Something went wrong ...please try again");
+                console.log(err);
             });
-    }
+    };
 }
 
 export const setPlaces = places => {
@@ -91,14 +88,14 @@ export const deletePlace =key=>{
         fetch("https://myapk-react-native.firebaseio.com/places/" + key + ".json", {
             method: "DELETE"
         })
-            .catch(err => {
-                console.log(err);
-                alert("Something went wrong ...please try again");
-            })
             .then(res => res.json())
             .then(parsedRes => {
                 console.log("done");
             })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong ...please try again");
+            });
     };
 }
 
