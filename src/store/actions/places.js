@@ -1,20 +1,27 @@
-import { SET_PLACES ,REMOVE_PLACE} from "./actionTypes"
-import { uiStartLoading, uiStopLoading } from "./index"
+import { SET_PLACES, REMOVE_PLACE } from "./actionTypes"
+import { uiStartLoading, uiStopLoading, authGetToken } from "./index"
 
 
 
 
 export const addPlace = (placeName, location, image) => {
     return dispatch => {
-
         dispatch(uiStartLoading());
-
-        fetch("https://us-central1-myapk-react-native.cloudfunctions.net/storeImage", {
-            method: "POST",
-            body: JSON.stringify({
-                image: image.base64
+        dispatch(authGetToken())
+            .catch(() => {
+                alert("No valid token found!");
             })
-        })
+            .then(token => {
+                return fetch(
+                    "https://us-central1-myapk-react-native.cloudfunctions.net/storeImage",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            image: image.base64
+                        })
+                    }
+                );
+            })
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong ...please try again");
@@ -32,10 +39,10 @@ export const addPlace = (placeName, location, image) => {
                     method: "POST",
                     body: JSON.stringify(placeData)
                 })
-                   .then(res => res.json())
+                    .then(res => res.json())
                     .then(parsedRes => {
                         dispatch(uiStopLoading());
-                       // dispatch(getPlaces());                  //to reflect added place on findplace screen
+                        dispatch(getPlaces());                  //to reflect added place on findplace screen
                     })
                     .catch(err => {
                         console.log(err);
@@ -49,62 +56,78 @@ export const addPlace = (placeName, location, image) => {
 };
 
 export const getPlaces = () => {
-    return (dispatch, getState) => {
-        const token = getState().auth.token;
-        if(!token){
-            return;
-        }
-        fetch("https://myapk-react-native.firebaseio.com/places.json?auth="+token)
+    return dispatch => {
+
+        dispatch(authGetToken())
+            .then(token => {
+                return fetch(
+                    "https://myapk-react-native.firebaseio.com/places.json?auth=" +
+                    token
+                );
+            })
+            .catch(() => {
+                alert("No valid token found!");
+            })
             .then(res => res.json())
             .then(parsedRes => {
-                console.log(parsedRes);
                 const places = [];
-
                 for (let key in parsedRes) {
                     places.push({
                         ...parsedRes[key],
-                        key: key,
-                        image: { uri: parsedRes[key].image }
-                    })
+                        image: {
+                            uri: parsedRes[key].image
+                        },
+                        key: key
+                    });
                 }
-                dispatch(setPlaces(places))
-
-            }).catch(err => {
-                alert("Something went wrong ...please try again");
+                dispatch(setPlaces(places));
+            })
+            .catch(err => {
+                alert("Something went wrong, sorry :/");
                 console.log(err);
             });
     };
+
+
 }
 
 export const setPlaces = places => {
-    return{
-        type:SET_PLACES,
-        places:places
+    return {
+        type: SET_PLACES,
+        places: places
     }
 };
 
 
-export const deletePlace =key=>{
-    
+export const deletePlace = key => {
+
     return dispatch => {
-        dispatch(removePlace(key));
-        fetch("https://myapk-react-native.firebaseio.com/places/" + key + ".json", {
-            method: "DELETE"
-        })
-            .then(res => res.json())
-            .then(parsedRes => {
-                console.log("done");
+        dispatch(authGetToken())
+            .catch(() => {
+                alert("No valid token found!");
             })
-            .catch(err => {
-                console.log(err);
-                alert("Something went wrong ...please try again");
+            .then(token => {
+                dispatch(removePlace(key));
+                fetch("https://myapk-react-native.firebaseio.com/places/" + key +
+                    ".json?auth=" +
+                    token, {
+                        method: "DELETE"
+                    })
+                    .then(res => res.json())
+                    .then(parsedRes => {
+                        console.log("done");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert("Something went wrong ...please try again");
+                    });
             });
     };
-}
+};
 
 export const removePlace = key => {
-    return{
-        type:REMOVE_PLACE,
-        key:key
+    return {
+        type: REMOVE_PLACE,
+        key: key
     };
 };
