@@ -49,10 +49,13 @@ export const addPlace = (placeName, location, image) => {
 };
 
 export const getPlaces = () => {
-    return dispatch => {
-
-        fetch("https://myapk-react-native.firebaseio.com/places.json")
-            // .then(res => res.json())
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+        if(!token){
+            return;
+        }
+        fetch("https://myapk-react-native.firebaseio.com/places.json?auth="+token)
+            .then(res => res.json())
             .then(parsedRes => {
                 console.log(parsedRes);
                 const places = [];
