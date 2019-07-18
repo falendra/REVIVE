@@ -16,11 +16,11 @@ Navigation.registerComponent("myApk.AuthScreen",()=> AuthScreen,store,Provider);
 Navigation.registerComponent("myApk.SharePlaceScreen",()=> SharePlaceScreen,store,Provider);
 Navigation.registerComponent("myApk.FindPlaceScreen",()=> FindPlaceScreen,store,Provider);
 Navigation.registerComponent("myApk.PlaceDetailScreen",()=> PlaceDetailScreen,store,Provider);
-Navigation.registerComponent("myApk.SideDrawerScreen",()=> SideDrawerScreen);
+Navigation.registerComponent("myApk.SideDrawerScreen",()=> SideDrawerScreen,store,Provider);
 
 //start app
 
-Navigation.startSingleScreenApp({
+export default()=> Navigation.startSingleScreenApp({
   screen:{
     screen:"myApk.AuthScreen",
     title:"Login"
