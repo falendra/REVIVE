@@ -8,6 +8,7 @@
     "android": "react-native run-android"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.5.1",
     "@types/react-native-navigation": "^2.0.0",
     "firebase-tools": "^7.1.0",
     "react": "16.8.3",
