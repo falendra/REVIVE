@@ -50,7 +50,8 @@ export const addPlace = (placeName, location, image) => {
                 const placeData = {
                     name: placeName,
                     location: location,
-                    image: parsedRes.imageUrl
+                    image: parsedRes.imageUrl,
+                    imagePath:parsedRes.imagePath
                 };
 
                 return fetch("https://myapk-react-native.firebaseio.com/places.json?auth="+
@@ -73,7 +74,7 @@ export const addPlace = (placeName, location, image) => {
                         
                     })
                     .catch(err => {
-                       
+                        
                         alert("Something went wrong ...please try again");
                         dispatch(uiStopLoading());
                     });
