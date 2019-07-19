@@ -34,11 +34,18 @@ export const addPlace = (placeName, location, image) => {
                 );
             })
             .catch(err => {
-                console.log(err);
+                
                 alert("Something went wrong ...please try again");
                 dispatch(uiStopLoading());
             })
-            .then(res => res.json())
+            .then(res => {
+                if(res.ok){
+                    return res.json();
+                }
+                else{
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 const placeData = {
                     name: placeName,
@@ -52,14 +59,21 @@ export const addPlace = (placeName, location, image) => {
                     method: "POST",
                     body: JSON.stringify(placeData)
                 })
-                    .then(res => res.json())
+                    .then(res =>{
+                        if(res.ok){
+                            return res.json();
+                        }
+                        else{
+                            throw new Error();
+                        }
+                    })
                     .then(parsedRes => {
                         dispatch(uiStopLoading());
                         dispatch(placeAdded());
-                        //dispatch(getPlaces());                  //to reflect added place on findplace screen
+                        
                     })
                     .catch(err => {
-                        console.log(err);
+                       
                         alert("Something went wrong ...please try again");
                         dispatch(uiStopLoading());
                     });
@@ -88,8 +102,18 @@ export const getPlaces = () => {
             .catch(() => {
                 alert("No valid token found!");
             })
-            .then(res => res.json())
+            .then(res => {
+                if(res.ok){
+                    return res.json();
+                }
+                else{
+                    throw new Error();
+                }
+                
+               
+            })
             .then(parsedRes => {
+                
                 const places = [];
                 for (let key in parsedRes) {
                     places.push({
@@ -103,8 +127,8 @@ export const getPlaces = () => {
                 dispatch(setPlaces(places));
             })
             .catch(err => {
-                alert("Something went wrong, sorry :/");
-                console.log(err);
+                alert("Something went wrong, sorry ");
+            
             });
     };
 
@@ -133,12 +157,18 @@ export const deletePlace = key => {
                     token, {
                         method: "DELETE"
                     })
-                    .then(res => res.json())
+                    .then(res =>{
+                        if(res.ok){
+                            return res.json();
+                        }
+                        else{
+                            throw new Error();
+                        }
+                    })
                     .then(parsedRes => {
                         console.log("done");
                     })
                     .catch(err => {
-                        console.log(err);
                         alert("Something went wrong ...please try again");
                     });
             });
