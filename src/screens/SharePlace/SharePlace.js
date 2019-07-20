@@ -10,13 +10,13 @@ import {
   ActivityIndicator
 } from "react-native";
 import { connect } from "react-redux";
-import { addPlace ,placeAdded,startAddPlace} from "../../store/actions/index";
+import { addPlace ,startAddPlace} from "../../store/actions/index";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import MainText from "../../components/UI/MainText/MainText";
 import HeadingText from "../../components/UI/HeadingText/HeadingText";
 import PickImage from "../../components/PickImage/PickImage";
 import PickLocation from "../../components/PickLocation/PickLocation";
-import validate from "../../utility/validation";
+import validate from "../../utility/validation"
 
 class SharePlaceScreen extends Component {
   static navigatorStyle = {
@@ -74,6 +74,7 @@ class SharePlaceScreen extends Component {
   componentDidUpdate(){
     if(this.props.placeAdded){
       this.props.navigator.switchToTab({tabIndex :0})
+      console.log("user id : "+this.props.userId)
     }
   }
 
@@ -96,11 +97,13 @@ class SharePlaceScreen extends Component {
 
 
   placeAddedHandler = () => {
-
+      
     this.props.onAddPlace(
       this.state.controls.placeName.value,
       this.state.controls.location.value,
-      this.state.controls.image.value
+      this.state.controls.image.value,
+    
+      this.props.userId
     );
 
     this.reset();
@@ -204,13 +207,14 @@ const mapStateToProps = state => {
   return {
     isLoading: state.ui.isLoading,
     placeAdded:state.places.placeAdded,
+    userId:state.auth.userId
 
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
+    onAddPlace: (placeName, location, image, userId) => dispatch(addPlace(placeName, location, image,userId)),
     onStartAddPlace :()=> dispatch(startAddPlace())
 
   };

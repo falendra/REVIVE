@@ -9,7 +9,7 @@ export const  startAddPlace=()=>{
     };
 
 
-export const addPlace = (placeName, location, image) => {
+export const addPlace = (placeName, location, image,userId) => {
     return dispatch => {
         let authToken;
 
@@ -51,9 +51,10 @@ export const addPlace = (placeName, location, image) => {
                     name: placeName,
                     location: location,
                     image: parsedRes.imageUrl,
-                    imagePath:parsedRes.imagePath
+                    imagePath:parsedRes.imagePath,
+                    userId:userId
                 };
-
+                    console.log(userId)
                 return fetch("https://myapk-react-native.firebaseio.com/places.json?auth="+
                 authToken,
                  {
@@ -90,20 +91,23 @@ return{
 }
 };
 
-export const getPlaces = () => {
+export const getPlaces = (userId) => {
     return dispatch => {
-
+            console.log(userId)
+            console.log('in getPlaces')
         dispatch(authGetToken())
             .then(token => {
+                const queryParams = '?auth='+ token +'&orderBy=\"userId\"&equalTo='+'\"'+userId+'\"';
+                
                 return fetch(
-                    "https://myapk-react-native.firebaseio.com/places.json?auth=" +
-                    token
+                    "https://myapk-react-native.firebaseio.com/places.json" + queryParams
                 );
             })
             .catch(() => {
                 alert("No valid token found!");
             })
             .then(res => {
+                console.log(res)
                 if(res.ok){
                     return res.json();
                 }

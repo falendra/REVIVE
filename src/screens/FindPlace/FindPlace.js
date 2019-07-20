@@ -29,7 +29,7 @@ class FindPlaceScreen extends Component {
     onNavigatorEvent = event => {
         if (event.type === "ScreenChangedEvent") {
             if(event.id==="willAppear"){
-                this.props.onLoadPlaces();
+                this.props.onLoadPlaces(this.props.userId);
             }
           }
 
@@ -149,13 +149,14 @@ const styles = StyleSheet.create({
 })
 const mapStateToProps = state => {
     return {
-        places: state.places.places
+        places: state.places.places,
+        userId: state.auth.userId
     };
 };
 
 const mapDispatchToProps =dispatch =>{
     return{
-        onLoadPlaces : ()=> dispatch(getPlaces())
+        onLoadPlaces : (userId)=> dispatch(getPlaces(userId))
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);
