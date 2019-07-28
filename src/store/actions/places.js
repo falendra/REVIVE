@@ -54,7 +54,7 @@ export const addPlace = (placeName, location, image,userId) => {
                     imagePath:parsedRes.imagePath,
                     userId:userId
                 };
-                    console.log(userId)
+                  
                 return fetch("https://myapk-react-native.firebaseio.com/places.json?auth="+
                 authToken,
                  {
@@ -93,8 +93,7 @@ return{
 
 export const getPlaces = (userId) => {
     return dispatch => {
-            console.log(userId)
-            console.log('in getPlaces')
+          
         dispatch(authGetToken())
             .then(token => {
                 const queryParams = '?auth='+ token +'&orderBy=\"userId\"&equalTo='+'\"'+userId+'\"';
@@ -107,7 +106,7 @@ export const getPlaces = (userId) => {
                 alert("No valid token found!");
             })
             .then(res => {
-                console.log(res)
+                
                 if(res.ok){
                     return res.json();
                 }

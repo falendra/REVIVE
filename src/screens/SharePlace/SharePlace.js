@@ -74,7 +74,7 @@ class SharePlaceScreen extends Component {
   componentDidUpdate(){
     if(this.props.placeAdded){
       this.props.navigator.switchToTab({tabIndex :0})
-      console.log("user id : "+this.props.userId)
+      
     }
   }
 
